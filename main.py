@@ -111,34 +111,6 @@ def init_messenger(request: Request):
         return Response(content=request.query_params["hub.challenge"])
     return 'Failed to verify token'
 
-# @app.post("/webhook")
-# async def fbwebhook(data: dict):
-#     try:
-#         message = data['entry'][0]['messaging'][0]['message']
-#         sender_id = data['entry'][0]['messaging'][0]['sender']['id']
-#
-#         if 'text' in message and message['text'].strip().lower() == "hello":
-#             access_token = user_session.get('page_access_token', None)
-#
-#             # access_token = "EAASrls9cObsBO41GKaKBLZBtdosFh8ByO8LNx4lxZCDF6JXqzIuhux2MoZAOI38QiE4FrjKjozDLkHkZBdOuYNF7nxzCd05gWIQxcFkx2lb8ZAr0ZAPTdTVxnZBUElKwtFPGLhutrmszZCS9USg5bBr2xkvvaH1F8GcZCFmFt1fvxxr9ZAaZAdUPWEv7LzRdhY5AHFr"
-#             print(access_token)
-#             request_body = {
-#                 "recipient": {"id": sender_id},
-#                 "message": {"text": "hello, world!"}
-#             }
-#             async with httpx.AsyncClient() as client:
-#                 response = await client.post(
-#                     f"{FB_MESSENGER_API_BASE}?access_token={access_token}",
-#                     json=request_body
-#                 )
-#             return response.json()
-#     except KeyError as e:
-#         raise HTTPException(status_code=400, detail="Malformed request data") from e
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail="An error occurred processing your request") from e
-#
-
-
 
 @app.post("/webhook")
 async def receive_facebook_webhook(request: Request):
@@ -146,8 +118,3 @@ async def receive_facebook_webhook(request: Request):
     print("Received webhook event:", webhook_event)
 
     return Response(status_code=200)
-    fb_token = request.query_params.get("hub.verify_token")
-    print("fb_token:",fb_token)
-    if fb_token == FB_VERIFY_TOKEN:
-        return Response(content=request.query_params["hub.challenge"])
-    return 'Failed to verify token'
